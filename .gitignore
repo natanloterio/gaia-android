@@ -27,3 +27,4 @@ keystore/release.keystore
 /keystore/debug.keystore.jks
 /keystore/debug.keystore.properties
 /keystore/release.keystore.properties
+/fastlane/report.xml

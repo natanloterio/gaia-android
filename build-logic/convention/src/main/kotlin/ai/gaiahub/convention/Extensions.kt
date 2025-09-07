@@ -1,23 +1,15 @@
+@file:Suppress("unused")
+
 package ai.gaiahub.convention
 
 import ai.gaiahub.buildconvention.libs.Libs
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.support.delegates.DependencyHandlerDelegate
-
-
-fun Libs.Library.notation(): String {
-    return if (this.version.isNotEmpty()) {
-        "${this.group}:${this.name}:${this.version}"
-    } else {
-        "${this.group}:${this.name}"
-    }
-}
-
-
 fun DependencyHandlerDelegate.implementationLibs(lib: Libs.Library) {
     add("implementation", lib.notation())
 }
+
 
 fun DependencyHandlerDelegate.testImplementationLibs(lib: Libs.Library) {
     add("testImplementation", lib.notation())
@@ -36,6 +28,17 @@ fun DependencyHandlerScope.implementationBom(library: Libs.Library) {
         add("implementation", platform(library.notation()))
     } catch (e: Exception) {
         println("Error applying ${library.notation()}: ${e.message}")
+    }
+}
+
+
+
+
+fun Libs.Library.notation(): String {
+    return if (this.version.isNotEmpty()) {
+        "${this.group}:${this.name}:${this.version}"
+    } else {
+        "${this.group}:${this.name}"
     }
 }
 
