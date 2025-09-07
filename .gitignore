@@ -17,3 +17,12 @@ local.properties
 /feature/build/*
 */build/**
 **/build/
+
+keystore/release.keystore
+/app/release/app-release.apk
+/app/release/baselineProfiles/0/app-release.dm
+/app/release/baselineProfiles/1/app-release.dm
+/keystore/release.keystore.jks
+/app/release/output-metadata.json
+/keystore/debug.keystore.jks
+/keystore/debug.keystore.properties
