@@ -21,13 +21,22 @@ platform :android do
     gradle(task: "test")
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
+  desc "Build & distribute to Firebase App Distribution"
   lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+    # Build the app (APK or AAB)
+    gradle(
+      task: "assemble",
+      build_type: "Release"   # Or `debug` if you want a debug build
+    )
+
+    # Upload to Firebase App Distribution
+    firebase_app_distribution(
+      app:          ENV['FIREBASE_APP_ID'],     # e.g., "1:1234567890:android:abcdef"
+      groups:       "beta-testers",             # comma‑separated group names or IDs
+      release_notes_file: "./fastlane/release_notes.txt",
+      firebase_token_path: "~/.fastlane/firebase-service-account.json",
+      apk:          "./app/build/outputs/apk/release/app-release.apk"  # path to built APK
+    )
   end
 
   desc "Deploy a new version to the Google Play"

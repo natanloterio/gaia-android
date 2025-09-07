@@ -5,9 +5,29 @@ plugins {
 }
 
 android {
-    namespace = "ai.gaiahub"
+    signingConfigs {
+        create("release") {
+            storeFile = file("keystore/release.keystore")
+            storePassword = "your_store_password"
+            keyAlias = "your_key_alias"
+            keyPassword = "your_key_password"
+        }
+        create("debug") {
+            storeFile = file("keystore/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+    buildTypes {
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
 }
-
 dependencies {
     implementation(project(":features:login"))
     implementation(project(":core:domain:usecases"))
@@ -15,4 +35,3 @@ dependencies {
     implementation(project(":di"))
     implementation(libs.androidx.junit.ktx)
 }
-

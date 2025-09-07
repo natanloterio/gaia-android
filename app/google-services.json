@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "538209284122",
+    "project_id": "gaiahub-chat-8d1bf",
+    "storage_bucket": "gaiahub-chat-8d1bf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538209284122:android:362d95c01b83c5edfca1a3",
+        "android_client_info": {
+          "package_name": "ai.gaiahub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfmeYuRZ1QEBb7jDobTjqdMgCa63CYp8Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
