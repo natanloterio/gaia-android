@@ -1,4 +1,4 @@
-package ai.gaiahub
+package ai.gaiahub.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

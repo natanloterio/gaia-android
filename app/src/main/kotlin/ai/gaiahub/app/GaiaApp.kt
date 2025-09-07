@@ -1,13 +1,13 @@
-package ai.gaiahub
+package ai.gaiahub.app
 
-import android.app.Application
 import ai.gaiahub.di.DiConfig
 import ai.gaiahub.di.useCasesModule
 import ai.gaiahub.login.di.loginFeatureModule
 import ai.gaiahub.services.tracking.di.trackingModule
+import android.app.Application
 import org.koin.core.context.GlobalContext
 
-class MyApplication : Application() {
+class GaiaApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
