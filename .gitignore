@@ -26,3 +26,4 @@ keystore/release.keystore
 /app/release/output-metadata.json
 /keystore/debug.keystore.jks
 /keystore/debug.keystore.properties
+/keystore/release.keystore.properties
