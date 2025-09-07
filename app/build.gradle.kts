@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    namespace = "ai.gaiahub.app"
+
     signingConfigs {
         create("release") {
             storeFile = file("keystore/release.keystore")
@@ -12,7 +14,7 @@ android {
             keyAlias = "your_key_alias"
             keyPassword = "your_key_password"
         }
-        create("debug") {
+        create("devDebug") {
             storeFile = file("keystore/debug.keystore")
             storePassword = "android"
             keyAlias = "androiddebugkey"
@@ -21,7 +23,7 @@ android {
     }
     buildTypes {
         getByName("debug") {
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("devDebug")
         }
         getByName("release") {
             signingConfig = signingConfigs.getByName("release")
