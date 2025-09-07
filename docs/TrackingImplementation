@@ -1,0 +1,150 @@
+@startuml
+title Implementation Layer - Concrete Classes
+!define IMPL_COLOR #FFF3E0
+
+box ":features" #E3F2FD
+    participant "Feature Layer" as Client
+    note over Client: Features Layer:\n- Only knows domain interfaces\n- Implementation injected via DI
+end box
+
+box "Implementation Layer - Concrete Classes" IMPL_COLOR
+    participant "LoginTrackingServiceImpl" as LTSI
+    participant "LoginEventBuilderImpl" as LEBI
+    participant "LoginEvent" as LE
+    participant "UIComponentsTrackingServiceImpl" as UITSI
+    participant "ButtonClickEventBuilderImpl" as BCEBI
+    participant "ButtonClickEvent" as BCE
+    participant "TrackingExecutorImpl" as TEI
+    participant "TrackingProviderRouterImpl" as TPRI
+    participant "TrackingConfiguration" as TC
+    participant "FirebaseTrackingProvider" as FTP
+    participant "CrashlyticsTrackingProvider" as CTP
+    note over LTSI, CTP: Implementation Layer:\n- Concrete classes that implement domain contracts\n- Features layer never directly references these
+end box
+
+== Login Event Tracking - Concrete Implementation Details ==
+
+Client -> LTSI: trackLogin("user@test.com", true, null)
+activate LTSI
+note right of Client: DI container has injected the concrete\n'LoginTrackingServiceImpl' to the Feature Layer.
+
+LTSI -> LEBI: new LoginEventBuilderImpl()
+activate LEBI
+note right of LEBI: Concrete Builder created to hold event parameters.
+
+LTSI -> LEBI: email("user@test.com")
+note right of LEBI: this.email = "user@test.com"
+LTSI -> LEBI: success(true)
+note right of LEBI: this.success = true
+LTSI -> LEBI: error(null)
+note right of LEBI: this.error = null
+
+LTSI -> LEBI: build()
+LEBI -> LE: new LoginEvent(email, isSuccess, error)
+activate LE
+note right of LE: The builder instantiates a 'LoginEvent'\nwith the collected parameters.
+LE --> LEBI: LoginEvent instance
+deactivate LE
+
+LEBI --> LTSI: LoginEvent
+deactivate LEBI
+
+LTSI -> TEI: executeTracking(LoginEvent)
+activate TEI
+note right of TEI: The executor, also a concrete implementation,\nreceives the event.
+
+TEI -> TPRI: getProviderTypesForEvent(LoginEvent)
+activate TPRI
+note right of TPRI: The router implementation uses its internal\n`eventProviderMapping` to find providers\nfor the `LoginEvent` class.
+TPRI --> TEI: Set{FIREBASE, CRASHLYTICS}
+deactivate TPRI
+
+TEI -> TC: configuration.enabledProviders
+activate TC
+note right of TC: Executor checks the enabled providers\nfrom its injected `TrackingConfiguration`.
+TC --> TEI: Set{FIREBASE, CRASHLYTICS}
+deactivate TC
+
+TEI -> TEI: Filter providers\n(targetTypes ∩ enabledProviders)
+
+par Firebase Provider Execution
+    TEI -> FTP: trackEvent(LoginEvent)
+    activate FTP
+    note right of FTP: Firebase implementation creates a `Bundle`\nand calls `firebaseAnalytics.logEvent()`.
+    FTP --> TEI: Result.success(Unit)
+    deactivate FTP
+par Crashlytics Provider Execution
+    TEI -> CTP: trackEvent(LoginEvent)
+    activate CTP
+    note right of CTP: Crashlytics implementation calls `crashlytics.setCustomKey()`\nfor each event parameter.
+    CTP --> TEI: Result.success(Unit)
+    deactivate CTP
+end
+
+TEI -> TEI: Aggregate Results\n(Partition successful/failed results)
+
+TEI --> LTSI: TrackingResult.Success
+deactivate TEI
+
+LTSI --> Client: TrackingResult.Success
+deactivate LTSI
+
+== Button Click Tracking - Concrete Implementation Details ==
+
+Client -> UITSI: trackButtonClick()
+activate UITSI
+note right of UITSI: DI provides `UIComponentsTrackingServiceImpl`.
+
+UITSI -> BCEBI: new ButtonClickEventBuilderImpl()
+activate BCEBI
+note right of BCEBI: A concrete builder is created.
+
+UITSI -> BCEBI: build()
+BCEBI -> BCE: new ButtonClickEvent()
+activate BCE
+note right of BCE: A `ButtonClickEvent` is instantiated\nwith no parameters.
+BCE --> BCEBI: ButtonClickEvent instance
+deactivate BCE
+
+BCEBI --> UITSI: ButtonClickEvent
+deactivate BCEBI
+
+UITSI -> TEI: executeTracking(ButtonClickEvent)
+activate TEI
+
+TEI -> TPRI: getProviderTypesForEvent(ButtonClickEvent)
+activate TPRI
+note right of TPRI: Router returns providers for `ButtonClickEvent`.
+TPRI --> TEI: Set{FIREBASE}
+deactivate TPRI
+
+TEI -> TC: configuration.enabledProviders
+activate TC
+TC --> TEI: Set{FIREBASE, CRASHLYTICS}
+deactivate TC
+
+TEI -> TEI: Filter providers\n(targetTypes ∩ enabledProviders) = {FIREBASE}
+
+TEI -> FTP: trackEvent(ButtonClickEvent)
+activate FTP
+note right of FTP: Executor sends the event only to the\n`FirebaseTrackingProvider`.
+FTP --> TEI: Result.success(Unit)
+deactivate FTP
+
+TEI -> TEI: Aggregate Results\n(Single successful provider)
+
+TEI --> UITSI: TrackingResult.Success
+deactivate TEI
+
+UITSI --> Client: TrackingResult.Success
+deactivate UITSI
+
+note over Client, CTP
+    **Implementation Details Overview:**
+    - The diagram shows the specific, step-by-step calls between concrete classes.
+    - It highlights how the `*Impl` classes are wired together.
+    - The diagram details the internal logic, such as a builder's private fields, a provider's calls to a fake analytics library, and the executor's filtering and aggregation logic.
+    - This provides a low-level view of the system's runtime behavior, in contrast to the previous diagram's high-level domain view.
+end note
+
+@enduml

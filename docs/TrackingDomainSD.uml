@@ -1,0 +1,118 @@
+@startuml
+title Domain Layer Relationships and Contracts
+
+box ":features" #E3F2FD
+    participant "Feature Layer" as Client
+    note over Client: Features Layer:\n- Only knows domain interfaces\n- No knowledge of concrete classes
+end box
+
+box "Domain Layer" #E8F5E8
+    participant "LoginTrackingService" as LTS <<interface>>
+    participant "UIComponentsTrackingService" as UITS <<interface>>
+    participant "TrackingExecutor" as TE <<interface>>
+    participant "EventBuilder" as EB <<abstract>>
+    participant "LoginEvent" as LE <<data class>>
+    participant "ButtonClickEvent" as BCE <<data class>>
+    participant "TrackingEvent" as TEv <<interface>>
+    participant "TrackingProviderRouter" as TPR <<interface>>
+    participant "TrackingProvider" as TP <<interface>>
+    participant "TrackingResult" as TR <<sealed class>>
+    note over LTS, TR: Domain Layer:\n- Contains only interfaces, abstract classes,\n  and data models\n- Defines the contracts for tracking\n- Core business logic without implementation details
+end box
+
+== Login Event Tracking - Domain View ==
+
+Client -> LTS: trackLogin(email, isSuccess, error)
+activate LTS
+note right of Client: Features calls a domain interface.
+note right of LTS: The implementation of this interface\nis provided at runtime via DI.
+
+LTS -> EB: build()
+note over EB: The service uses an EventBuilder abstraction\n to create the event.
+note right of LTS: Parameters are used to configure the builder\nbefore calling build().
+
+EB -> LE: <<create>>
+note right of EB: The builder constructs a concrete\nTrackingEvent (e.g., LoginEvent).
+LE --> EB: LoginEvent instance
+
+EB --> LTS: LoginEvent
+deactivate EB
+
+LTS -> TE: executeTracking(LoginEvent)
+activate TE
+note right of TE: The executor orchestrates the tracking\nprocess for any TrackingEvent.
+
+TE -> TPR: getProviderTypesForEvent(LoginEvent)
+activate TPR
+note right of TPR: The router determines which providers\nshould handle a given event type.
+TPR --> TE: Set<ProviderType>
+deactivate TPR
+
+TE -> TE: get relevant providers based on type
+
+loop For each relevant ProviderType
+    TE -> TP: trackEvent(LoginEvent)
+    activate TP
+    note right of TP: The executor dispatches the event\nto each tracking provider abstraction.
+    TP --> TE: Result<Unit>
+    deactivate TP
+end
+
+TE --> LTS: TrackingResult
+note right of TE: The executor returns a result based on\nthe outcome from all providers.
+deactivate TE
+
+LTS --> Client: TrackingResult
+deactivate LTS
+note left of Client: The Feature Layer receives the result,\ncompletely unaware of the implementation.
+
+== Button Click Tracking - Domain View ==
+
+Client -> UITS: trackButtonClick()
+activate UITS
+
+UITS -> EB: build()
+note right of UITS: The service uses a builder to create\nthe ButtonClickEvent.
+
+EB -> BCE: <<create>>
+note right of EB: A builder constructs a ButtonClickEvent.
+BCE --> EB: ButtonClickEvent instance
+
+EB --> UITS: ButtonClickEvent
+deactivate EB
+
+UITS -> TE: executeTracking(ButtonClickEvent)
+activate TE
+note right of TE: The same executor abstraction handles\nall types of tracking events.
+
+TE -> TPR: getProviderTypesForEvent(ButtonClickEvent)
+activate TPR
+TPR --> TE: Set<ProviderType>
+deactivate TPR
+
+TE -> TE: get relevant providers based on type
+
+loop For each relevant ProviderType
+    TE -> TP: trackEvent(ButtonClickEvent)
+    activate TP
+    TP --> TE: Result<Unit>
+    deactivate TP
+end
+
+TE --> UITS: TrackingResult
+deactivate TE
+
+UITS --> Client: TrackingResult
+deactivate UITS
+
+note over Client, TR
+    **Key Domain Layer Interactions:**
+    - **Service Interfaces** (`LoginTrackingService`, `UIComponentsTrackingService`): Entry points for the Feature Layer.
+    - **Event Builder** (`EventBuilder`): A factory abstraction for creating `TrackingEvent` objects.
+    - **Event Models** (`LoginEvent`, `ButtonClickEvent`): The data containers for what is being tracked.
+    - **Executor Interface** (`TrackingExecutor`): A contract for executing the core tracking logic.
+    - **Provider Interfaces** (`TrackingProviderRouter`, `TrackingProvider`): Contracts for routing and dispatching events to external services.
+    - **Result Model** (`TrackingResult`): The standardized output for all tracking operations.
+end note
+
+@enduml
