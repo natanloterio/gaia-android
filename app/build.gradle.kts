@@ -1,24 +1,30 @@
+import ai.gaiahub.convention.applyPropertiesFromFile
+import ai.gaiahub.convention.prop
+
 plugins {
     id("ai.gaiahub.convention.application")
     id("ai.gaiahub.convention.application.compose")
     id("ai.gaiahub.convention.dependencies")
 }
 
+applyPropertiesFromFile("keystore/debug.keystore.properties")
+applyPropertiesFromFile("keystore/release.keystore.properties")
+
 android {
     namespace = "ai.gaiahub.app"
 
     signingConfigs {
         create("release") {
-            storeFile = file("keystore/release.keystore")
-            storePassword = "your_store_password"
-            keyAlias = "your_key_alias"
-            keyPassword = "your_key_password"
+            storeFile = file("${rootDir}/keystore/release.keystore.jks")
+            keyPassword = prop("relaseStorePassword")
+            keyAlias = prop("releaseKeyAlias")
+            storePassword = prop("releaseStorePassword")
         }
         create("devDebug") {
-            storeFile = file("keystore/debug.keystore")
-            storePassword = "android"
-            keyAlias = "androiddebugkey"
-            keyPassword = "android"
+            storeFile = file("${rootDir}/keystore/debug.keystore.jks")
+            keyPassword = prop("debugStorePassword")
+            keyAlias = prop("debugKeyAlias")
+            storePassword = prop("debugStorePassword")
         }
     }
     buildTypes {
