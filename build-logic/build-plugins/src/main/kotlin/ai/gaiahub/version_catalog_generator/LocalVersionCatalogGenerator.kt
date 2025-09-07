@@ -52,7 +52,7 @@ object LocalVersionCatalogGenerator {
         val versionsBlock = buildString {
             appendLine("    object Versions {")
             for ((key, value) in versions) {
-                appendLine("          const val $key = \"$value\"")
+                appendLine("          const val ${key.replace('-', '_')} = \"$value\"")
             }
             appendLine("    }")
         }
@@ -62,11 +62,11 @@ object LocalVersionCatalogGenerator {
             for ((key, value) in libraries) {
                 val group = value["group"] ?: ""
                 val name = value["name"] ?: ""
-                val versionRef = value["version.ref"]
+                val versionRef = value["version.ref"]?.replace("-", "_")
                 if (versionRef == null) {
-                    appendLine("        val ${key.replace('-', '_')} = Library(\"$group\", \"$name\", \"\")")
+                    appendLine("        val ${key.replace('-', '_')} = Library(group = \"$group\", name = \"$name\", version = \"\")")
                 } else {
-                    appendLine("        val ${key.replace('-', '_')} = Library(\"$group\", \"$name\", Versions.$versionRef)")
+                    appendLine("        val ${key.replace('-', '_')} = Library(group = \"$group\", name = \"$name\", version = Versions.$versionRef)")
                 }
 
             }

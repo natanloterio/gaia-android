@@ -1,5 +1,7 @@
 plugins {
     `kotlin-dsl`
+    `java-gradle-plugin`
+    id("gaiahub.version-catalog-generator") apply true
 }
 
 group = "com.droidstarter.buildlogic"
@@ -13,6 +15,15 @@ dependencies {
     implementation(libs.android.gradlePlugin)
     implementation(libs.kotlin.gradlePlugin)
 }
+
+sourceSets {
+    main{
+        kotlin{
+            srcDir("build/generated/sources/versionCatalog")
+        }
+    }
+}
+
 
 gradlePlugin {
     plugins {
@@ -48,4 +59,15 @@ gradlePlugin {
             implementationClass = "ai.gaiahub.convention.DependenciesConventionPlugin"
         }
     }
+}
+
+println("This project: ${project.name}")
+println("This rootProject: ${project.rootProject.name}")
+
+tasks.matching { it.name == "assemble" || it.name.startsWith("assemble") }.configureEach {
+    dependsOn(tasks.named("generateVersionCatalogLibs"))
+}
+
+tasks.named("compileKotlin") {
+    dependsOn("generateVersionCatalog")
 }

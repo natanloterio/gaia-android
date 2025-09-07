@@ -26,7 +26,7 @@ gradlePlugin {
     plugins {
         register("versionCatalogGenerator") {
             id = "gaiahub.version-catalog-generator"
-            implementationClass = "gaiahub.version_catalog_generator.VersionCatalogGeneratorPlugin"
+            implementationClass = "ai.gaiahub.version_catalog_generator.VersionCatalogGeneratorPlugin"
         }
     }
 }
