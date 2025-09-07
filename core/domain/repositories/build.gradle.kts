@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "ai.gaiahub.bara.core.domain.reposidories"
+    namespace = "ai.gaiahub.core.domain.reposidories"
 }

@@ -1,4 +1,4 @@
-package ai.gaiahub.bara
+package ai.gaiahub
 
 import org.junit.Test
 

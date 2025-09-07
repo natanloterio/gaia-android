@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "ai.gaiahub.bara.code.domain.usecases"
+    namespace = "ai.gaiahub.code.domain.usecases"
 }
 
 dependencies {

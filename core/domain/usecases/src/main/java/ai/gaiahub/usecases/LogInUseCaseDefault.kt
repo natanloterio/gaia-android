@@ -1,6 +1,6 @@
 package ai.gaiahub.usecases
 
-import ai.gaiahub.tracking.contracts.LoginTrackingService
+import ai.gaiahub.core.domain.services.tracking.contracts.LoginTrackingService
 import android.util.Patterns
 
 class LogInUseCaseDefault(

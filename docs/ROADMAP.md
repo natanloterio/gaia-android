@@ -364,7 +364,7 @@ The objective of this initiative is to **modernize and modularize the Android co
 ## **Estimated Effort / Timeline (Optional)**
 
 | Phase                       | Est. Duration |
-| --------------------------- | ------------- |
+|-----------------------------|---------------|
 | Tooling & Lint Setup        | 2 days        |
 | Gradle Plugin + Modules     | 3–5 days      |
 | DTO Isolation + Mapping     | 3 days        |
@@ -598,7 +598,7 @@ The objective of this initiative is to **modernize and modularize the Android co
 ## **Estimated Effort / Timeline (Optional)**
 
 | Phase                       | Est. Duration |
-| --------------------------- | ------------- |
+|-----------------------------|---------------|
 | Tooling & Lint Setup        | 2 days        |
 | Gradle Plugin + Modules     | 3–5 days      |
 | DTO Isolation + Mapping     | 3 days        |
@@ -613,7 +613,7 @@ The objective of this initiative is to **modernize and modularize the Android co
 
 
 
-2. **Usage**
+1. **Usage**
 
    * Inject toggle service into features.
    * Use toggles to conditionally navigate, render UI, or inject dependencies.

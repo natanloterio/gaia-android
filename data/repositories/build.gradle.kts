@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "ai.gaiahub.bara.data.repositories"
+    namespace = "ai.gaiahub.data.repositories"
 }

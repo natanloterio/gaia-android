@@ -5,5 +5,5 @@ plugins {
 }
 
 android {
-    namespace = "ai.gaiahub.bara.core.domain.services.tracking"
+    namespace = "ai.gaiahub.core.domain.services.tracking"
 }

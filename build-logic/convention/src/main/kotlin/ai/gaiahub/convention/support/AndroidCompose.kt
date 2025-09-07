@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 package ai.gaiahub.convention.support
 
 import com.android.build.api.dsl.ApplicationExtension
@@ -15,7 +13,6 @@ internal fun Project.configureAndroidCompose(
     val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
     extension.apply {
-        @Suppress("UnstableApiUsage")
         buildFeatures.apply {
             compose = true
         }

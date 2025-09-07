@@ -5,5 +5,5 @@ plugins {
 }
 
 android {
-    namespace = "ai.gaiahub.bara.core.domain.models"
+    namespace = "ai.gaiahub.core.domain.models"
 }

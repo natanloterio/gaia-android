@@ -5,5 +5,5 @@ plugins {
 }
 
 android {
-    namespace = "ai.gaiahub.bara.thirdpartiessdk"
+    namespace = "ai.gaiahub.thirdpartiessdk"
 }

@@ -2,7 +2,7 @@ package ai.gaiahub.login.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ai.gaiahub.tracking.contracts.UIComponentsTrackingService
+import ai.gaiahub.core.domain.services.tracking.contracts.UIComponentsTrackingService
 import ai.gaiahub.usecases.LogInUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

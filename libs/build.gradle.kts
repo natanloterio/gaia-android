@@ -5,5 +5,5 @@ plugins {
 }
 
 android {
-    namespace = "ai.gaiahub.bara.libs"
+    namespace = "ai.gaiahub.libs"
 }
