@@ -2,9 +2,9 @@ package ai.gaiahub.version_catalog_generator
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.register
 
+@Suppress("unused")
 class VersionCatalogGeneratorPlugin : Plugin<Project?> {
     override fun apply(project: Project) {
 
