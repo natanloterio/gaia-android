@@ -16,7 +16,7 @@ android {
     signingConfigs {
         create("release") {
             storeFile = file("${rootDir}/keystore/release.keystore.jks")
-            keyPassword = prop("relaseStorePassword")
+            keyPassword = prop("releaseKeyPassword")
             keyAlias = prop("releaseKeyAlias")
             storePassword = prop("releaseStorePassword")
         }
