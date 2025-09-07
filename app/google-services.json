@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:538209284122:android:362d95c01b83c5edfca1a3",
+        "mobilesdk_app_id": "1:538209284122:android:4ea129e942d084e9fca1a3",
         "android_client_info": {
-          "package_name": "ai.gaiahub"
+          "package_name": "ai.gaiahub.app"
         }
       },
       "oauth_client": [],

@@ -1,19 +1,22 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
     id("gaiahub.version-catalog-generator") apply true
 }
 
-group = "com.droidstarter.buildlogic"
+group = "ai.gaiahub.buildlogic"
+
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
-dependencies {
-    implementation(libs.android.gradlePlugin)
-    implementation(libs.kotlin.gradlePlugin)
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+    }
 }
 
 sourceSets {
@@ -22,6 +25,11 @@ sourceSets {
             srcDir("build/generated/sources/versionCatalog")
         }
     }
+}
+
+dependencies {
+    implementation("com.android.tools.build:gradle:8.2.2")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.23")
 }
 
 

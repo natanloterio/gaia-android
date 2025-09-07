@@ -12,6 +12,15 @@ applyPropertiesFromFile("keystore/release.keystore.properties")
 
 android {
     namespace = "ai.gaiahub.app"
+    defaultConfig {
+        applicationId = "ai.gaiahub.app"
+        versionCode = 1
+        versionName = "0.0.1"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+    }
 
     signingConfigs {
         create("release") {
@@ -27,6 +36,7 @@ android {
             storePassword = prop("debugStorePassword")
         }
     }
+
     buildTypes {
         getByName("debug") {
             signingConfig = signingConfigs.getByName("devDebug")
@@ -41,5 +51,4 @@ dependencies {
     implementation(project(":core:domain:usecases"))
     implementation(project(":services:tracking"))
     implementation(project(":di"))
-    implementation(libs.androidx.junit.ktx)
 }
